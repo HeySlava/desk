@@ -80,22 +80,7 @@ module desk(
         translate([-25, 65, 80])
         cube([5, 50, 35]);
     }
-    
-    module office_desk() {
-        thickness = 15;
-        height = 50;
-        deep = 100;
-        width = 200;
-        side_deep = 70;
-        translate([0, 0, height - thickness])
-        cube([deep, width, thickness]);
-        
-        cube([side_deep, thickness, height - thickness]);
-        translate([0, width - thickness, 0])
-        cube([side_deep, thickness, height - thickness]);
-    }
-        
-    
+
     module locker() {
         locker_death = 44;
         locker_width = 39;
@@ -116,6 +101,24 @@ module desk(
             locker_width - 2*box_thickness,
             box]);
         }
+    }
+    
+    
+    module office_desk() {
+        thickness = 2;
+        height = 70;
+        deep = 70;
+        width = 150;
+        side_deep = 50;
+        translate([0, 0, height - thickness])
+        cube([deep, width, thickness]);
+        
+        translate([(deep-side_deep)/2, 0, 0])
+        cube([side_deep, thickness, height - thickness]);
+        translate([(deep-side_deep)/2, width - thickness, 0])
+        cube([side_deep, thickness, height - thickness]);
+        translate([0, width+5, 0])
+        locker();
     }
         
 
@@ -146,6 +149,6 @@ module desk(
     
 desk(
     show_room=true,
-    show_bed=false,
-    desk_type="office"
+    show_bed=true,
+    desk_type="old"
 );
