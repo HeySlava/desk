@@ -124,7 +124,13 @@ module room(
     
     module new_desk(
     base_size = 4.5,
-    base_thickness = 0.2
+    base_thickness = 0.2,
+    leg_deep = 80,
+    leg_heigth = 100,
+    desk_base_deep = 60,
+    desk_base_width = 75,
+    between_legs = 10,
+    margin = 0
     ) {
         module base(
         length
@@ -139,9 +145,41 @@ module room(
                     length +2
                 ]);
             }
-        }
+        }    
+
+        
+        leg_margin = (leg_deep - between_legs - 2 * base_size) / 2;
+        for ( i = [0:1])
+        translate([0, 2*i*desk_base_width, 0])
+        mirror( [0, i, 0] )
+        translate([0, margin, 0])
+        union(){
+        rotate([0, 90, 0])        
+        base(length=leg_deep);
+            
+        for (x = [0:1])
+            rotate([0, 0, -90])
+            translate(
+                [-base_size, 
+                leg_margin + x *(between_legs + base_size),
+                0])
+            union(){
+            base(length=leg_heigth);
+            translate([0, 0, leg_heigth])
+            rotate([0, -90, 0])
+            base(length=desk_base_width);
+            }
+        
+        translate(
+            [
+                (leg_deep-desk_base_deep)/2, 
+                0, 
+                leg_heigth+base_size
+            ])
         rotate([0, 90, 0])
-        base(length=100);
+        base(length=desk_base_deep);
+        }
+        
     }
         
 
