@@ -65,12 +65,12 @@ module desk(
             polygon(points = points, paths = paths, convexity = 10);
             }
             for (x = [-1:0])
-		    translate ([-10, box_thickness,
-            margin + x * box_togheter])
-		    cube([
-            100, 
-            42 - 2*box_thickness,
-            box]);
+		    translate ([-10, box_thickness, margin + x * box_togheter])
+		    cube([100, 42 - 2*box_thickness, box]);
+            translate([2, 42, -0.5])
+                cube([50, 85+box_thickness, 75-margin]);
+            translate([-10, 42, -0.5])
+                cube([80, 85+box_thickness, 26]);
         }
         
         translate([-27-10, 75, 0])
@@ -148,7 +148,7 @@ module desk(
 }
     
 desk(
-    show_room=true,
-    show_bed=true,
+    show_room=false,
+    show_bed=false,
     desk_type="old"
 );
