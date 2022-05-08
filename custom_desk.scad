@@ -57,7 +57,7 @@ module room(
         box_width = 42 - (box_thickness * 2);
         box_togheter = 65;
         box = box_togheter - box_thickness;
-        margin = 5;
+        tabletop_leg_margin = 5;
         difference(){
             linear_extrude(75) {
             points = [[0,0], [70,0], [70,42], [45,42], [45,130], [0,130]];
@@ -65,10 +65,10 @@ module room(
             polygon(points = points, paths = paths, convexity = 10);
             }
             for (x = [-1:0])
-		    translate ([-10, box_thickness, margin + x * box_togheter])
+		    translate ([-10, box_thickness, tabletop_leg_margin + x * box_togheter])
 		    cube([100, 42 - 2*box_thickness, box]);
             translate([2, 42, -0.5])
-                cube([50, 85+box_thickness, 75-margin]);
+                cube([50, 85+box_thickness, 75-tabletop_leg_margin]);
             translate([-10, 42, -0.5])
                 cube([80, 85+box_thickness, 26]);
         }
@@ -90,12 +90,12 @@ module room(
         box_width = locker_width - (box_thickness * 2);
         box_togheter = 19;
         box = box_togheter - box_thickness;
-        margin = 5;
+        tabletop_leg_margin = 5;
         difference(){
         cube([locker_death, locker_width, locker_height]);
             for (x = [-1:box_n])
 		    translate ([box_thickness/2, box_thickness,
-            margin + x * box_togheter])
+            tabletop_leg_margin + x * box_togheter])
 		    cube([
             locker_death+10, 
             locker_width - 2*box_thickness,
@@ -127,10 +127,12 @@ module room(
     base_thickness = 0.2,
     leg_deep = 80,
     leg_heigth = 100,
-    desk_base_deep = 60,
-    desk_base_width = 75,
-    between_legs = 10,
-    margin = 0
+    desk_base_deep = 80,
+    desk_base_width = 120,
+    between_legs = 20,
+    tabletop_width = 150,
+    tabletop_deep = 80,
+    tabletop_thickness = 5
     ) {
         module base(
         length
@@ -147,38 +149,45 @@ module room(
             }
         }    
 
-        
-        leg_margin = (leg_deep - between_legs - 2 * base_size) / 2;
-        for ( i = [0:1])
-        translate([0, 2*i*desk_base_width, 0])
-        mirror( [0, i, 0] )
-        translate([0, margin, 0])
-        union(){
-        rotate([0, 90, 0])        
-        base(length=leg_deep);
-            
-        for (x = [0:1])
-            rotate([0, 0, -90])
-            translate(
-                [-base_size, 
-                leg_margin + x *(between_legs + base_size),
-                0])
+        module frame(){
+            leg_margin = (leg_deep - between_legs - 2 * base_size) / 2;
+            for ( i = [0:1])
+            translate([0, i*desk_base_width, 0])
+            mirror( [0, i, 0] )
             union(){
-            base(length=leg_heigth);
-            translate([0, 0, leg_heigth])
-            rotate([0, -90, 0])
-            base(length=desk_base_width);
+            rotate([0, 90, 0])        
+            base(length=leg_deep);
+                
+            for (x = [0:1])
+                rotate([0, 0, -90])
+                translate(
+                    [-base_size, 
+                    leg_margin + x *(between_legs + base_size),
+                    0])
+                union(){
+                base(length=leg_heigth);
+                translate([0, 0, leg_heigth])
+                rotate([0, -90, 0])
+                base(length=desk_base_width/2);
+                }
+            
+            translate(
+                [
+                    (leg_deep-desk_base_deep)/2, 
+                    0, 
+                    leg_heigth+base_size
+                ])
+            rotate([0, 90, 0])
+            base(length=desk_base_deep);
             }
-        
-        translate(
-            [
-                (leg_deep-desk_base_deep)/2, 
-                0, 
-                leg_heigth+base_size
-            ])
-        rotate([0, 90, 0])
-        base(length=desk_base_deep);
         }
+        translate([0, 0, leg_heigth + 2*base_size])
+        cube([tabletop_deep, tabletop_width, tabletop_thickness]);
+        translate([
+            (tabletop_deep - leg_deep) /2,
+            (tabletop_width - desk_base_width) / 2, 
+            base_size])
+        frame();
         
     }
         
