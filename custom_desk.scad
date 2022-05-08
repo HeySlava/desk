@@ -6,7 +6,7 @@ door_height = 205;
 door_diff = 67;   // from wall to door
 wall_thickness = 1;
 
-module desk(
+module room(
     show_room = true,
     show_bed = true,
     desk_type
@@ -120,6 +120,29 @@ module desk(
         translate([0, width+5, 0])
         locker();
     }
+    
+    
+    module new_desk(
+    base_size = 4.5,
+    base_thickness = 0.2
+    ) {
+        module base(
+        length
+        ) {
+            difference(){
+            cube([base_size, base_size, length]);
+            translate([base_thickness/2, base_thickness/2, -1])
+            cube(
+                [
+                    base_size-base_thickness, 
+                    base_size-base_thickness, 
+                    length +2
+                ]);
+            }
+        }
+        rotate([0, 90, 0])
+        base(length=100);
+    }
         
 
     button();
@@ -139,16 +162,21 @@ module desk(
         locker();
     }
     
-        if (desk_type == "office"){
+    if (desk_type == "office"){
         translate([5, 5, 0])
         color("white")
         office_desk();
-
+    }
+    
+    if (desk_type == "new"){
+        translate([0, 0, 0])
+        color("white")
+        new_desk();
     }
 }
     
-desk(
+room(
     show_room=false,
     show_bed=false,
-    desk_type="old"
+    desk_type="new"
 );
