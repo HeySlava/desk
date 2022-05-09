@@ -1,6 +1,4 @@
-room_width = 225;
-room_lenght = 305;
-room_height = 260;
+room_shape = [225, 305, 260];
 door_lenght = 78;
 door_height = 205;
 door_diff = 67;   // from wall to door
@@ -18,24 +16,20 @@ module room(
     desk_base_deep = 60,
     desk_base_width = 120,
     tabletop = [150, 80, 5],
-    between_legs = 20,
-    tabletop_width = 150,
-    tabletop_deep = 80,
-    tabletop_thickness = 5
-
+    between_legs = 20
 ){
     module room_wall() {
         color("LightSkyBlue")
         difference() {
             
         translate( [0, 0, 0])
-        cube([room_lenght+wall_thickness, room_width+wall_thickness, room_height]);
+        cube([room_shape.y+wall_thickness, room_shape.x+wall_thickness, room_shape.z]);
           
         translate( [wall_thickness+1, wall_thickness/2, wall_thickness/2])
-        cube([room_lenght, room_width, room_height+1]);
+        cube([room_shape.y, room_shape.x, room_shape.z+1]);
             
         translate( [door_diff, wall_thickness, wall_thickness])
-        cube([door_lenght, room_lenght+wall_thickness, door_height]);
+        cube([door_lenght, room_shape.y+wall_thickness, door_height]);
         
         }
     }
@@ -44,8 +38,8 @@ module room(
         bed_width = 134;
         bed_height = 60;
         color("brown")
-        translate( [room_lenght-bed_width, wall_thickness/2, 0.5])
-        cube([bed_width, room_width, bed_height]);
+        translate( [room_shape.y-bed_width, wall_thickness/2, 0.5])
+        cube([bed_width, room_shape.x, bed_height]);
     }
     
     module button() {
@@ -54,7 +48,7 @@ module room(
         z_position = 74;
         x_position = 48.5;
         color("white")
-        translate([x_position, room_width, z_position])
+        translate([x_position, room_shape.x, z_position])
         rotate([90, 0, 0])
         cube([button_size, button_size, button_death]);
     }
@@ -185,10 +179,10 @@ module room(
         }
         color("white")
         translate([0, 0, leg_heigth + 2*base_size])
-        cube([tabletop_deep, tabletop_width, tabletop_thickness]);
+        cube([tabletop.x, tabletop.y, tabletop.z]);
         translate([
-            (tabletop_deep - leg_deep) /2,
-            (tabletop_width - desk_base_width) / 2, 
+            (tabletop.x - leg_deep) /2,
+            (tabletop.y - desk_base_width) / 2, 
             base_size])
         frame();
         
@@ -224,16 +218,13 @@ module room(
 }
     
 room(
-    show_room=false,             // true or false. Около двери выключатель
-    show_bed=false,              // true or false
+    show_room=true,             // true or false. Около двери выключатель
+    show_bed=true,              // true or false
     desk_style="new",            // new, current, office
-
 // Настройки работают только для new
     base_size = 3,            // размер швеллера в см
     base_thickness = 2,       // толщина швеллера в см
-    tabletop_width = 200,       // ширина столешницы в см
-    tabletop_deep = 100,         // глубина столешницы в см
-    tabletop_thickness = 5,     // толщина столешницы в см
+    tabletop = [100, 200, 5],   // столешница [глубина, ширина, толщина]
     leg_deep = 80,              // глубина ножек в основании (около пола) в см
     between_legs = 20,          // расстояние между ножками
     leg_heigth = 100,           // высота ножек (без учета швеллера) в см
