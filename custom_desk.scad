@@ -9,7 +9,7 @@ wall_thickness = 1;
 module room(
     show_room = true,
     show_bed = true,
-    desk_type,
+    desk_style,
     
     base_size = 4.5,
     base_thickness = 0.2,
@@ -17,6 +17,7 @@ module room(
     leg_heigth = 100,
     desk_base_deep = 60,
     desk_base_width = 120,
+    tabletop = [150, 80, 5],
     between_legs = 20,
     tabletop_width = 150,
     tabletop_deep = 80,
@@ -24,17 +25,15 @@ module room(
 
 ){
     module room_wall() {
+        color("LightSkyBlue")
         difference() {
             
-        color("LightSkyBlue")
         translate( [0, 0, 0])
         cube([room_lenght+wall_thickness, room_width+wall_thickness, room_height]);
           
-        //color("LightSkyBlue")  
         translate( [wall_thickness+1, wall_thickness/2, wall_thickness/2])
         cube([room_lenght, room_width, room_height+1]);
             
-        //color("LightSkyBlue")
         translate( [door_diff, wall_thickness, wall_thickness])
         cube([door_lenght, room_lenght+wall_thickness, door_height]);
         
@@ -77,7 +76,7 @@ module room(
             }
             for (x = [-1:0])
 		    translate ([-10, box_thickness, tabletop_leg_margin + x * box_togheter])
-		    cube([100, 42 - 2*box_thickness, box]);
+                cube([100, 42 - 2*box_thickness, box]);
             translate([2, 42, -0.5])
                 cube([50, 85+box_thickness, 75-tabletop_leg_margin]);
             translate([-10, 42, -0.5])
@@ -85,11 +84,11 @@ module room(
         }
         
         translate([-27-10, 75, 0])
-        cube([27, 27, 80]);
+            cube([27, 27, 80]);
         
         color("black")
         translate([-25, 65, 80])
-        cube([5, 50, 35]);
+            cube([5, 50, 35]);
     }
 
     module locker() {
@@ -156,6 +155,7 @@ module room(
             for ( i = [0:1])
             translate([0, i*desk_base_width, 0])
             mirror( [0, i, 0] )
+            color("black")
             union(){
             rotate([0, 90, 0])        
             base(length=leg_deep);
@@ -183,6 +183,7 @@ module room(
             base(length=desk_base_deep);
             }
         }
+        color("white")
         translate([0, 0, leg_heigth + 2*base_size])
         cube([tabletop_deep, tabletop_width, tabletop_thickness]);
         translate([
@@ -202,7 +203,7 @@ module room(
         bed();
     }
     
-    if (desk_type == "current"){
+    if (desk_style == "current"){
         translate([42, 15, 0])
         old_desc();
         
@@ -210,33 +211,32 @@ module room(
         locker();
     }
     
-    if (desk_type == "office"){
+    if (desk_style == "office"){
         translate([5, 5, 0])
         color("white")
         office_desk();
     }
     
-    if (desk_type == "new"){
+    if (desk_style == "new"){
         translate([5, 5, 0.5])
-        color("white")
         new_desk();
     }
 }
     
 room(
-    show_room=true,             // true or false. Около двери выключатель
-    show_bed=true,              // true or false
-    desk_type="new",            // new, current, office
+    show_room=false,             // true or false. Около двери выключатель
+    show_bed=false,              // true or false
+    desk_style="new",            // new, current, office
 
 // Настройки работают только для new
-    base_size = 4.5,            // размер швеллера в см
-    base_thickness = 0.2,       // толщина швеллера в см
-    tabletop_width = 150,       // ширина столешницы в см
-    tabletop_deep = 80,         // глубина столешницы в см
+    base_size = 3,            // размер швеллера в см
+    base_thickness = 2,       // толщина швеллера в см
+    tabletop_width = 200,       // ширина столешницы в см
+    tabletop_deep = 100,         // глубина столешницы в см
     tabletop_thickness = 5,     // толщина столешницы в см
-    leg_deep = 20,              // глубина ножек в основании (около пола) в см
+    leg_deep = 80,              // глубина ножек в основании (около пола) в см
     between_legs = 20,          // расстояние между ножками
     leg_heigth = 100,           // высота ножек (без учета швеллера) в см
     desk_base_deep = 60,        // глубина основания под столешницу в см
-    desk_base_width = 120       // ширина всей рамы под столешницей
+    desk_base_width = 150       // ширина всей рамы под столешницей
 );
