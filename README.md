@@ -11,4 +11,8 @@
 
 Отчасти хочется новый стол, но так же хотелось и попробовать что такое [Openscad](https://openscad.org/).
 
-![Текущая комната](https://kapitonov.tech/img/7bb575594c.png)
+---
+
+*Текущее рабочее место*
+
+![Текущая комната](https://kapitonov.tech/img/7bb575594c.png "The current desktop")
